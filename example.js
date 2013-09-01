@@ -1,12 +1,12 @@
 var transloadit = new TransloaditXhr({
-  authkey: "MY_AUTH_KEY",
+  authKey: "MY_AUTH_KEY",
   templateId: "MY_TEMPLATE_ID",
 
   successCb: function(fileUrl) {
     console.log("Finished upload of file, amazon file url is: " + fileUrl);
   },
 
-  errorCb: function() {
+  errorCb: function(error) {
     alert(error);
   }
 });
