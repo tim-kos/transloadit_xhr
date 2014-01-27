@@ -26,7 +26,7 @@
                     return;
                 }
 
-                if (data.error || data.ok != "ASSEMBLY_EXECUTING") {
+                if (data.error || (data.ok != "ASSEMBLY_EXECUTING" && data.ok != "ASSEMBLY_UPLOADING")) {
                     if (typeof self.errorCb === "function") {
                         self.errorCb("Failed to check assembly (" + textStatus + ")");
                     }
