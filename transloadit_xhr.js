@@ -7,6 +7,7 @@
     function TransloaditXhr(opts) {
         this.authKey = opts.authKey;
         this.templateId = opts.templateId;
+        this.steps = opts.steps || {};
         this.successCb = opts.successCb || null;
         this.errorCb = opts.errorCb || null;
     }
@@ -48,7 +49,8 @@
     TransloaditXhr.prototype.uploadFile = function(file) {
         var params = {
             auth: {key: this.authKey},
-            "template_id": this.templateId
+            "template_id": this.templateId,
+            steps: this.steps
         };
         var self = this;
 
@@ -57,7 +59,7 @@
         formPost.append("file", file);
 
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://api2.transloadit.com/assemblies", true);
+        xhr.open("POST", "//api2.transloadit.com/assemblies", true);
 
         xhr.onreadystatechange = function(event) {
             var req = event.target;
@@ -67,7 +69,11 @@
                     var parsedData = jQuery.parseJSON(req.responseText);
                     self.checkAssemblyStatus(parsedData.assembly_url);
                 } else if (typeof self.errorCb === "function") {
-                    self.errorCb("Failed to upload file");
+                    if(req.responseText.length > 0) {
+                      self.errorCb(jQuery.parseJSON(req.responseText).message);
+                    } else
+                      self.errorCb("Failed to upload file");
+                    }
                 }
             }
         };

@@ -1,6 +1,7 @@
 var transloadit = new TransloaditXhr({
   authKey: "MY_AUTH_KEY",
   templateId: "MY_TEMPLATE_ID",
+  steps: {step_name: {step: "options"}} //optional
 
   successCb: function(fileUrl) {
     console.log("Finished upload of file, amazon file url is: " + fileUrl);
