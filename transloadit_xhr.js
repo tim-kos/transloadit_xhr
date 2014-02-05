@@ -59,7 +59,7 @@
         formPost.append("file", file);
 
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://api2.transloadit.com/assemblies", true);
+        xhr.open("POST", "//api2.transloadit.com/assemblies", true);
 
         xhr.onreadystatechange = function(event) {
             var req = event.target;
