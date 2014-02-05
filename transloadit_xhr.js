@@ -7,6 +7,7 @@
     function TransloaditXhr(opts) {
         this.authKey = opts.authKey;
         this.templateId = opts.templateId;
+        this.steps = opts.steps || {};
         this.successCb = opts.successCb || null;
         this.errorCb = opts.errorCb || null;
     }
@@ -48,7 +49,8 @@
     TransloaditXhr.prototype.uploadFile = function(file) {
         var params = {
             auth: {key: this.authKey},
-            "template_id": this.templateId
+            "template_id": this.templateId,
+            steps: this.steps
         };
         var self = this;
 
