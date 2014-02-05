@@ -67,7 +67,11 @@
                     var parsedData = jQuery.parseJSON(req.responseText);
                     self.checkAssemblyStatus(parsedData.assembly_url);
                 } else if (typeof self.errorCb === "function") {
-                    self.errorCb("Failed to upload file");
+                    if(req.responseText.length > 0) {
+                      self.errorCb(jQuery.parseJSON(req.responseText).message);
+                    } else
+                      self.errorCb("Failed to upload file");
+                    }
                 }
             }
         };
