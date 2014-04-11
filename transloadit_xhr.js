@@ -8,8 +8,12 @@
         this.authKey = opts.authKey;
         this.templateId = opts.templateId;
         this.steps = opts.steps || {};
-        this.successCb = opts.successCb || null;
-        this.errorCb = opts.errorCb || null;
+        this.successCb = opts.successCb || null;    // Callback: Completed 
+        this.errorCb = opts.errorCb || null;        // Callback: Failed
+        this.progressCb = opts.progressCb || null;  // Callback: File upload progressed
+        this.processCb = opts.processCb || null;    // Callback: File uploaded, still processing the file
+
+        this.XMLHTTPRequestUpload = null;
     }
 
     TransloaditXhr.prototype.checkAssemblyStatus = function(assemblyUrl) {
@@ -26,6 +30,10 @@
                     }
                     return;
                 }
+
+                if (data.ok == "ASSEMBLY_EXECUTING")
+                    if (typeof self.processCb === "function")
+                        self.processCb();
 
                 if (data.error || (data.ok != "ASSEMBLY_EXECUTING" && data.ok != "ASSEMBLY_UPLOADING")) {
                     if (typeof self.errorCb === "function") {
@@ -46,6 +54,11 @@
         });
     };
 
+    TransloaditXhr.prototype.onProgress = function(progressEvent) {
+        if (typeof this.progressCb === "function")
+            this.progressCb(100.0 * progressEvent.loaded / progressEvent.total);
+    }
+
     TransloaditXhr.prototype.uploadFile = function(file) {
         var params = {
             auth: {key: this.authKey},
@@ -60,6 +73,8 @@
 
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "//api2.transloadit.com/assemblies", true);
+        xhr.upload.self = this;
+        xhr.upload.onprogress = this.onProgress.bind(this);
 
         xhr.onreadystatechange = function(event) {
             var req = event.target;
