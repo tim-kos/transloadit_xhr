@@ -5,9 +5,8 @@
 (function(window) {
 
     function TransloaditXhr(opts) {
-        this.authKey = opts.authKey;
-        this.templateId = opts.templateId;
-        this.steps = opts.steps || {};
+        this.params = opts.params;
+        this.signature = opts.signature;
         this.successCb = opts.successCb || null;    // Callback: Completed 
         this.errorCb = opts.errorCb || null;        // Callback: Failed
         this.progressCb = opts.progressCb || null;  // Callback: File upload progressed
@@ -57,18 +56,20 @@
     TransloaditXhr.prototype.onProgress = function(progressEvent) {
         if (typeof this.progressCb === "function")
             this.progressCb(100.0 * progressEvent.loaded / progressEvent.total);
-    }
+    };
 
-    TransloaditXhr.prototype.uploadFile = function(file) {
-        var params = {
-            auth: {key: this.authKey},
-            "template_id": this.templateId,
-            steps: this.steps
-        };
-        var self = this;
+    TransloaditXhr.prototype.uploadFile = function(file, fieldsArr) {
+        var self = this,
+        	i;
 
         var formPost = new FormData();
-        formPost.append("params", JSON.stringify(params));
+        formPost.append("params", this.params);
+        formPost.append("signature", this.signature);
+        if (typeof fieldsArr !== "undefined") {
+	        for (i=0; i < fieldsArr.length; i++) {
+	  			formPost.append(fieldsArr[i].name, fieldsArr[i].value);
+			}
+		}
         formPost.append("file", file);
 
         var xhr = new XMLHttpRequest();
