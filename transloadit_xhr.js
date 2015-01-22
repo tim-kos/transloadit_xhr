@@ -5,12 +5,14 @@
 (function(window) {
 
   function TransloaditXhr(opts) {
-    this.params = opts.params;
-    this.signature = opts.signature;
-    this.successCb = opts.successCb || null;    // Callback: Completed
-    this.errorCb = opts.errorCb || null;        // Callback: Failed
+    this.useSSL = document.location.protocol === 'https:';
+
+    this.params     = opts.params;
+    this.signature  = opts.signature;
+    this.successCb  = opts.successCb || null;    // Callback: Completed
+    this.errorCb    = opts.errorCb || null;        // Callback: Failed
     this.progressCb = opts.progressCb || null;  // Callback: File upload progressed
-    this.processCb = opts.processCb || null;    // Callback: File uploaded, still processing the file
+    this.processCb  = opts.processCb || null;    // Callback: File uploaded, still processing the file
 
     this.XMLHTTPRequestUpload = null;
   }
@@ -88,7 +90,12 @@
       if (req.readyState === 4) {
         if (req.status === 200) {
           var parsedData = jQuery.parseJSON(req.responseText);
-          self.checkAssemblyStatus(parsedData.assembly_url);
+
+          var statusUrl = parsedData.assembly_url;
+          if (self.useSSL) {
+            statusUrl = parsedData.assembly_ssl_url;
+          }
+          self.checkAssemblyStatus(statusUrl);
         } else if (typeof self.errorCb === "function") {
           if (req.responseText.length > 0) {
             self.errorCb(jQuery.parseJSON(req.responseText).message);
