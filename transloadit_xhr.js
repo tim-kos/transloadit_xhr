@@ -68,6 +68,11 @@
     var i;
 
     var formPost = new FormData();
+
+    if (typeof this.params !== 'string') {
+      this.params = JSON.stringify(this.params);
+    }
+
     formPost.append("params", this.params);
     formPost.append("signature", this.signature);
 
