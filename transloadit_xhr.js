@@ -8,7 +8,7 @@
     this.useSSL = document.location.protocol === 'https:';
 
     this.params     = opts.params;
-    this.signature  = opts.signature;
+    this.signature  = opts.signature || null;
     this.successCb  = opts.successCb || null;    // Callback: Completed
     this.errorCb    = opts.errorCb || null;        // Callback: Failed
     this.progressCb = opts.progressCb || null;  // Callback: File upload progressed
@@ -21,9 +21,9 @@
     var self = this;
 
     $.ajax({
-      url: assemblyUrl,
-      type: "GET",
-      dataType: "json",
+      url      : assemblyUrl,
+      type     : "GET",
+      dataType : "json",
       success: function(data, textStatus) {
         if (data.ok && data.ok == "ASSEMBLY_COMPLETED") {
           if (typeof self.successCb === "function") {
@@ -74,7 +74,10 @@
     }
 
     formPost.append("params", this.params);
-    formPost.append("signature", this.signature);
+
+    if (this.signature) {
+      formPost.append("signature", this.signature);
+    }
 
     if (typeof fieldsArr !== "undefined") {
       for (i=0; i < fieldsArr.length; i++) {
