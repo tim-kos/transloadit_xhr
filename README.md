@@ -45,3 +45,17 @@ function upload() {
   transloadit.uploadFile(file);
 }
 ```
+
+## Authors
+
+* [Tim Koschützki](https://twitter.com/tim_kos)
+
+Contributions from:
+
+* [swelshh](https://github.com/swelshh)
+* [baohouse](https://github.com/baohouse)
+* [Pamela Fox](https://github.com/pamelafox)
+* [llabball](https://github.com/llabball)
+* [thilo](https://github.com/thilo)
+* [wavejumper](https://github.com/wavejumper)
+* [dogandemir](https://github.com/dogandemir)
