@@ -4,12 +4,20 @@ transloadit_xhr
 An XHR (XmlHttpRequest) file upload implementation for Transloadit.
 
 Transloadit's jQuery plugin now also offers support for XmlHttpRequest. Just
-set its "this._options.formData" attribute accordingly, which makes this very
-project somewhat obsolete.
+provide the `formData` parameter with a value of `true` or a FormData object
+and the jQuery plugin will use XHR:
 
-If you want a lightweight implementation without
-all the other functionality that the official jQuery plugin, then this project
-is something for you.
+```
+$('#myForm').transloadit({
+  wait: true,
+  formData: true,
+  autoSubmit: false
+});
+```
+
+This makes this very project somewhat obsolete. However, if you want a
+lightweight XHR implementation without all the other functionality of the
+official jQuery plugin, then this project is something for you.
 
 **Example:**
 
